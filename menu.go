@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 )
@@ -26,7 +25,7 @@ func showMenu() {
 		fmt.Println("Stopping program...")
 		os.Exit(0)
 	case "R":
-		fmt.Println(readList(filePath))
+		fmt.Println(readFile(filePath))
 	case "T":
 		test(filePath)
 	default:
@@ -36,30 +35,27 @@ func showMenu() {
 }
 
 func Delete(filePath string) {
-	fmt.Println("What line do you wanna delete?")
+	outputList := numberFile(filePath)
 
-	readList(filePath)
+	fmt.Println("Which line do you wanna delete?")
+	fmt.Println(outputList)
 
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		line := scanner.Text()
-		if line != "unwanted" {
-			fmt.Println(line)
-		}
-	}
-	if err := scanner.Err(); err != nil {
-		fmt.Println("Error deleting line", err)
-	}
+	var lineToDelete int
+	fmt.Scan(&lineToDelete)
+
+	newContent := deleteItem(outputList, lineToDelete)
+	fmt.Println(newContent)
+	fmt.Println("Deleted line:", lineToDelete)
 }
 
 func Add(filePath string) {
 	fmt.Println("Add an item")
 
-	writeToList(filePath)
+	writeChanges(filePath)
 
 }
 
 func test(filePath string) {
-	fmt.Println(readList(filePath))
+	fmt.Println(readFile(filePath))
 
 }
