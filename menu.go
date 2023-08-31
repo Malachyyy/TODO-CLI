@@ -1,8 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
-	"os"
+	"io"
 	"strings"
 )
 
@@ -21,15 +22,15 @@ func showMenu() {
 
 	input = strings.ToUpper(input)
 
-	switch input {
+	testDeleteItem(filePath, 1)
+
+	/*switch input {
 	case "A":
 		Add(filePath)
 	case "E":
 		fmt.Println("You are editing")
 	case "D":
-		for {
-			Delete(filePath)
-		}
+		Delete(filePath)
 	case "S":
 		fmt.Println("Exited program.")
 		os.Exit(0)
@@ -38,7 +39,26 @@ func showMenu() {
 	default:
 		fmt.Println("Insert the correct option ")
 
+	}*/
+}
+
+func testDeleteItem(filePath string, lineToDelete int) {
+	todoFile, err := readFile(filePath)
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
+	defer todoFile.Close()
+
+	lineToDelete = 3
+
+	var buf bytes.Buffer
+	io.Copy(&buf, todoFile)
+	asString := string(buf.Bytes())
+
+	output := deleteItem(asString, lineToDelete)
+
+	fmt.Println(output)
 }
 
 func Delete(filePath string) {

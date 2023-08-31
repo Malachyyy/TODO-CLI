@@ -84,9 +84,9 @@ func readFile(filePath string) (*os.File, error) {
 	// Opens the file
 	todoFile, err := os.Open(filePath)
 	if err != nil {
-		fmt.Println("Error:", err)
+		return nil, err
 	}
 
-	return todoFile, err
+	return todoFile, nil
 
 }
