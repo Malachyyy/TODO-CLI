@@ -7,15 +7,14 @@ import (
 	"strings"
 )
 
-func writeChanges(filePath string) {
+func writeItemsToFile(filePath string) {
 	// Add items to the text file
 	addToDo := bufio.NewScanner(os.Stdin)
 
 	addToDo.Scan()
-
 	input := addToDo.Text()
 
-	write, err := readFileWhileWriting(filePath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	write, err := readFileAndWrite(filePath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
 		fmt.Println("Error opening file", err)
 	}
@@ -70,11 +69,11 @@ func numberFile(filePath string) string {
 	return output
 }
 
-func readFileWhileWriting(filePath string, flags int, perm os.FileMode) (*os.File, error) {
-	// Read text file with flags and permissions to write to
-	todoFile, err := os.Open(filePath)
+func readFileAndWrite(filePath string, flags int, perm os.FileMode) (*os.File, error) {
+	// Opens the file and write a new item into it.
+	todoFile, err := os.OpenFile(filePath, flags, perm)
 	if err != nil {
-		return nil, err
+		fmt.Println("Error:", err)
 	}
 
 	return todoFile, err
@@ -82,9 +81,10 @@ func readFileWhileWriting(filePath string, flags int, perm os.FileMode) (*os.Fil
 }
 
 func readFile(filePath string) (*os.File, error) {
+	// Opens the file
 	todoFile, err := os.Open(filePath)
 	if err != nil {
-		return nil, err
+		fmt.Println("Error:", err)
 	}
 
 	return todoFile, err
